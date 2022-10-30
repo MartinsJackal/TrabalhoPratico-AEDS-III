@@ -23,7 +23,6 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 				if (lapide == 0) {
 					if (id == idConta) {
-						Menus.contaEncontrada();
 						return (int) posicaoRegistro;
 					}
 				}
@@ -57,7 +56,6 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 				if (lapide == 0) {
 					if (id == idConta) {
-						Menus.contaEncontrada();
 						return (int) posicao;
 					}
 
@@ -142,7 +140,8 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		RAF.write(byteArray); // Grava o registro
 
 		System.out.print(C.toString());
-		System.out.printf("\tConta %d aberta com sucesso!\n", C.idConta);
+
+		Menus.contaCriada(C.idConta);
 
 	}
 
@@ -158,6 +157,8 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 			return null;
 		}
 
+		Menus.contaEncontrada();
+
 		RAF.seek(posicao); // Posiciona o ponteiro na posicao do registro
 
 		RAF.readByte(); // Pula a lapide
@@ -171,7 +172,6 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		conta C = new conta(); // Cria um objeto conta
 
 		C.fromByteArray(byteArray); // Preenche o objeto conta com os dados do registro
-		System.out.println("posicao + " + posicao);
 
 		System.out.print(C.toString()); // Exibe os dados da conta
 
@@ -181,7 +181,8 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 	// Função de atualizar conta, que varre o sistema pelo ID informado a fim de
 	// alterar alguma informação, após a operação exibe a conta alterada.
-	public static void atualizar(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner in, String nomeUsuario, String cpf,
+	public static boolean atualizar(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner in, String nomeUsuario,
+			String cpf,
 			String nome,
 			int numeroEmails,
 			String[] emails, String senha, String cidade, float saldo,
@@ -202,7 +203,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		if (posicao == -1) {
 			Menus.contaNaoEncontrada();
-			return;
+			return false;
 		}
 
 		RAF.seek(posicao); // Posiciona o ponteiro na posicao do registro
@@ -242,6 +243,54 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		}
 
 		RAF.write(novoArray); // Escreve o novo registro
+		return true;
+	}
+
+	// Funcao chamada no main para receber o Id da conta que deseja atualizar,
+	// receber os novos dados da conta e chama a funçao
+	// que atualiza a conta propriamente dito
+	public static boolean receberDadosParaAtualizarConta(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner in,
+			int idConta)
+			throws IOException {
+		in.nextLine();
+
+		System.out.printf("\tNome de usuário: "); // Pede o ID da conta
+		String nomeUsuario = in.nextLine();
+
+		System.out.printf("\tCPF: ");
+		String cpf = in.nextLine();
+
+		System.out.printf("\tNome: ");
+		String nome = in.nextLine();
+
+		System.out.printf("\tNumero de emails: ");
+		int numeroEmails = in.nextInt();
+
+		in.nextLine();
+
+		String[] emails = new String[numeroEmails];
+
+		for (int i = 0; i < numeroEmails; i++) {
+			System.out.printf("\tEmail %d: ", i + 1);
+			emails[i] = in.nextLine();
+		}
+
+		System.out.printf("\tSenha: ");
+		String senha = in.nextLine();
+
+		System.out.printf("\tCidade: ");
+		String cidade = in.nextLine();
+
+		System.out.printf("\tSaldo (utilize ','): ");
+		float saldo = in.nextFloat();
+
+		System.out.printf("\tTransferências realizadas: ");
+		short transferenciasRealizadas = in.nextShort();
+
+		return Funcoes.atualizar(RAF, RAF2, in, nomeUsuario, cpf, nome,
+				numeroEmails, emails, senha, cidade,
+				saldo,
+				transferenciasRealizadas, idConta);
 	}
 
 	// Função de Deletar que varre o sistema pelo ID digitado e apaga a conta
@@ -266,14 +315,12 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		RAF2.seek(posicaoNoIndice); // Posiciona o ponteiro no arquivo de indices
 		RAF2.writeByte(1); // Escreve a lapide no arquivo de indices
 
-		Menus.contaDeletada(); // Exibe mensagem de conta deletada
-
 		return true;
 	}
 
 	// Metodo de transferencia de saldo entre conta remetente e conta destinatario,
 	// realizando uma alteraçao na variavel saldo da conta destino.
-	public static void transferencia(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner n1) throws IOException {
+	public static boolean transferencia(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner n1) throws IOException {
 		Menus.menuTransferencia();
 
 		conta C = new conta(); // Cria um objeto conta
@@ -287,7 +334,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		if (posicao1 == -1) {
 			Menus.contaNaoEncontrada();
-			return;
+			return false;
 		}
 
 		System.out.println("Digite o ID da conta destinatária:");
@@ -297,7 +344,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		if (posicao2 == -1) {
 			Menus.contaNaoEncontrada();
-			return;
+			return false;
 		}
 
 		System.out.println("Digite o valor a ser transferido:");
@@ -317,7 +364,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		if (valor > C.saldo) {
 			Menus.saldoInsuficiente();
-			return;
+			return false;
 		}
 
 		RAF.seek(posicao2); // Posiciona o ponteiro no inicio do registro 2
@@ -356,5 +403,6 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		Funcoes.atualizar(RAF, RAF2, n1, D.nomeUsuario, D.cpf, D.nomePessoa, D.numeroEmails, emailsD,
 				D.senha, D.cidade, D.saldo, D.transferenciasRealizadas, idConta2);
 
+		return true;
 	}
 }

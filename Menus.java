@@ -60,11 +60,35 @@ public class Menus {
         System.out.printf("\n");
     }
 
+    public static void contaAtualizada(int idConta) {
+        System.out.printf("\n");
+        System.out.printf("\t.--------------------------------------------.\n");
+        System.out.printf("\t|       Conta %d atualizada com sucesso!     |\n", idConta);
+        System.out.printf("\t'--------------------------------------------'\n");
+        System.out.printf("\n");
+    }
+
+    public static void contaCriada(int idConta) {
+        System.out.printf("\n");
+        System.out.printf("\t.----------------------------------------.\n");
+        System.out.printf("\t|       Conta %d criada com sucesso!     |\n", idConta);
+        System.out.printf("\t'----------------------------------------'\n");
+        System.out.printf("\n");
+    }
+
+    public static void transferenciaRealizada() {
+        System.out.printf("\n");
+        System.out.printf("\t.------------------------------------------------.\n");
+        System.out.printf("\t|       Transferência realizada com sucesso!     |\n");
+        System.out.printf("\t'------------------------------------------------'\n");
+        System.out.printf("\n");
+    }
+
     public static void contaNaoEncontrada() {
         System.out.printf("\n");
-        System.out.printf("\t.--------------------------------.\n");
-        System.out.printf("\t|       Conta não encontrada     |\n");
-        System.out.printf("\t'--------------------------------'\n");
+        System.out.printf("\t.---------------------------------.\n");
+        System.out.printf("\t|       Conta não encontrada!     |\n");
+        System.out.printf("\t'---------------------------------'\n");
         System.out.printf("\n");
     }
 
@@ -78,9 +102,9 @@ public class Menus {
 
     public static void contaDeletada() {
         System.out.printf("\n");
-        System.out.printf("\t.---------------------------.\n");
-        System.out.printf("\t|       Conta deletada      |\n");
-        System.out.printf("\t'---------------------------'\n");
+        System.out.printf("\t.----------------------------------------.\n");
+        System.out.printf("\t|       Conta deletada com sucesso!      |\n");
+        System.out.printf("\t'----------------------------------------'\n");
         System.out.printf("\n");
     }
 }
