@@ -13,21 +13,21 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		RAF2.seek(0);
 
-		posicao = RAF2.getFilePointer();
+		posicao = RAF2.getFilePointer(); // Guarda a posicao do ponteiro no arquivo de indices
 
 		while (posicao < RAF2.length()) {
 			try {
 				lapide = RAF2.readByte(); // Lê a lapide
-				id = RAF2.readInt(); // Lê o ID do registro do
-				posicaoRegistro = RAF2.readLong();
-				
+				id = RAF2.readInt(); // Lê o ID do registro
+				posicaoRegistro = RAF2.readLong(); // Lê posicao do registro
+
 				if (lapide == 0) {
 					if (id == idConta) {
 						Menus.contaEncontrada();
 						return (int) posicaoRegistro;
 					}
-
 				}
+
 				posicao = posicao + 1 + 4 + 8; // Atualiza a posição
 				RAF2.seek(posicao); // Vai para a posição
 			} catch (EOFException err) {
@@ -54,7 +54,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 			try {
 				lapide = RAF2.readByte(); // Lê a lapide
 				id = RAF2.readInt(); // Lê o ID do registro do
-				
+
 				if (lapide == 0) {
 					if (id == idConta) {
 						Menus.contaEncontrada();
@@ -71,7 +71,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		}
 		return -1;
 	}
-	
+
 	// Metodo de criação de contas que por sua vez faz uma pergunta dos dados da
 	// conta em seguida manda para a função que escreve no arquivo, em sequência
 	// exibe os dados da conta criada
@@ -159,17 +159,17 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		}
 
 		RAF.seek(posicao); // Posiciona o ponteiro na posicao do registro
-		
+
 		RAF.readByte(); // Pula a lapide
-		
+
 		int tamanhoRegistro = RAF.readInt(); // Lê o tamanho do registro
-		
+
 		byte byteArray[] = new byte[tamanhoRegistro]; // Cria um array de bytes com o tamanho do registro
-		
+
 		RAF.read(byteArray); // Lê o registro
-		
+
 		conta C = new conta(); // Cria um objeto conta
-		
+
 		C.fromByteArray(byteArray); // Preenche o objeto conta com os dados do registro
 		System.out.println("posicao + " + posicao);
 
@@ -181,7 +181,8 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 	// Função de atualizar conta, que varre o sistema pelo ID informado a fim de
 	// alterar alguma informação, após a operação exibe a conta alterada.
-	public static void atualizar(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner in, String nomeUsuario, String cpf, String nome,
+	public static void atualizar(RandomAccessFile RAF, RandomAccessFile RAF2, Scanner in, String nomeUsuario, String cpf,
+			String nome,
 			int numeroEmails,
 			String[] emails, String senha, String cidade, float saldo,
 			short transferenciasRealizadas, int idConta) throws IOException {
@@ -233,7 +234,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 			RAF.seek(RAF.length()); // Posiciona o ponteiro no final do arquivo
 			RAF.writeByte(0); // Escreve o byte de remoção
-			RAF.writeInt(novoArray.length); // Escreve o tamanho do registro	
+			RAF.writeInt(novoArray.length); // Escreve o tamanho do registro
 		} else {
 			RAF.seek(posicao); // Posiciona o ponteiro na posicao do registro
 			RAF.writeByte(0); // Escreve o byte de remoção
@@ -250,9 +251,9 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		int posicao;
 		int posicaoNoIndice;
 
-		posicao = buscar(idConta, RAF2);
+		posicao = buscar(idConta, RAF2); // Guarda posicao do registro no arquivo principal
 
-		posicaoNoIndice = buscarNoIndice(idConta, RAF2);
+		posicaoNoIndice = buscarNoIndice(idConta, RAF2); // Guarda posicao no arquivo de indices
 
 		if (posicao == -1) {
 			Menus.contaNaoEncontrada();
@@ -262,8 +263,8 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		RAF.seek(posicao); // Posiciona o ponteiro na posicao do registro
 		RAF.writeByte(1); // Escreve a lapide
 
-		RAF2.seek(posicaoNoIndice);
-		RAF2.writeByte(1); // Escreve a lapide
+		RAF2.seek(posicaoNoIndice); // Posiciona o ponteiro no arquivo de indices
+		RAF2.writeByte(1); // Escreve a lapide no arquivo de indices
 
 		Menus.contaDeletada(); // Exibe mensagem de conta deletada
 
