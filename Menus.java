@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Menus {
     // Visando melhor leitura do código, todos os menus impressos
     // se encontram nesta classe que apenas exibe ao usuário as informações
@@ -15,7 +17,8 @@ public class Menus {
         System.out.printf("\t| 3 - Atualizar conta                   |\n");
         System.out.printf("\t| 4 - Transferir                        |\n");
         System.out.printf("\t| 5 - Deletar conta                     |\n");
-        System.out.printf("\t| 6 - Sair                              |\n");
+        System.out.printf("\t| 6 - Menu LZW                          |\n");
+        System.out.printf("\t| 7 - Sair                              |\n");
         System.out.printf("\t'---------------------------------------'\n");
         System.out.printf("\n");
     }
@@ -106,5 +109,44 @@ public class Menus {
         System.out.printf("\t|       Conta deletada com sucesso!      |\n");
         System.out.printf("\t'----------------------------------------'\n");
         System.out.printf("\n");
+    }
+
+    public static void menuLZW() {
+        byte in1;
+        Scanner in = new Scanner(System.in);
+		do {
+            System.out.printf("\n");
+            System.out.printf("\t.---------------------------\n");
+            System.out.printf("\t|       Menu LZW            |\n");
+            System.out.printf("\t'---------------------------\n");
+            System.out.printf("\t|      1 - Compactação      |\n");
+            System.out.printf("\t|      2 - Descompactação   |\n");
+            System.out.printf("\t|      3 - Sair             |\n");
+            System.out.printf("\t'---------------------------\n");
+            System.out.printf("\n");
+    
+			System.out.println("Qual seria a operação a ser feita?");
+			in1 = in.nextByte();
+			switch(in1){
+				case 1:{
+					//Compactação
+                    Funcoes.codificador(null);
+				}
+				break;
+				case 2:{
+					//Descompactação
+					Funcoes.descodificador(null);
+				}
+				break;
+				case 3:{
+					System.out.println("Programa Encerrado");
+					System.exit(0);
+				}
+				default:{
+					System.out.println("Opção invalida!");
+				}
+			}
+		}while(in1 > 3);
+        in.close();
     }
 }

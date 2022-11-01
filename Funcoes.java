@@ -1,4 +1,7 @@
 import java.util.*;
+
+import javax.lang.model.util.ElementScanner6;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -404,5 +407,55 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 				D.senha, D.cidade, D.saldo, D.transferenciasRealizadas, idConta2);
 
 		return true;
+	}
+
+	//Função para mechermos com compactação e descompactação utilizando o algoritmo de LZW
+	public static void LZW(Scanner in){
+		
+	}
+
+	public static List<Integer> codificador(String text) {
+		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
+		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario para percorrermos o proprio
+		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos valores dos nossos dados no dicionario até estourarmos a capacidade.
+			dicionario.put(String.valueOf((char) i), i);
+
+		}
+
+		String foundChars = ""; //Declaramos uma variavel auxiliar para armazenar os caracteres encontrados para unilos posteriormente
+		List<Integer> result = new ArrayList<>(); //Criamos um array para exibir o resultado no fim
+		for (char caracter : text.toCharArray()) { //Percorremos o dicionario verificando se o caracter existe, se não inserimos diretamente no array de result o codigo daquele caracter se existe armazenamos em "foundChars" e passamos para o proximo para realizar a união
+			String charsToAdd = foundChars + caracter;
+			if(dicionario.containsKey(charsToAdd)){
+				foundChars = charsToAdd;
+			}else{
+				result.add(dicionario.get(foundChars));
+				dicionario.put(charsToAdd, tamanhoDicionario++);
+				foundChars = String.valueOf(caracter);
+		}
+	}
+	return result;
+	
+	}
+
+	public static String descodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
+		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
+		Map<Integer, String> dicionario = new HashMap<>(); //Neste caso precisamos saber os numeros e os caracteres para decodificarmos.
+		for (int i = 0; i < tamanhoDicionario; i++){
+			dicionario.put(i, String.valueOf((char) i));
+		}
+
+		String caracteres = String.valueOf((char) encodedText.remove(0).intValue()); //Verificamos caracter por caracter para decodifica-lo e remove-lo do array para constar somente a decodificação
+		StringBuilder result = new StringBuilder(caracteres);//Construtor de Strings para o resultado
+		for(int code : encodedText){ //Verificamos se há ou não o "code" na iteração atual, se sim nós recuperamos a informação dele e jogamos dentro de entry para ficar armazenado, se não pegamos o primeiro caracter da iteração anterior e unimos eles para formar um novo codigo.
+			String entry = dicionario.containsKey(code)
+			? dicionario.get(code)
+			: caracteres + caracteres.charAt(0);
+			result.append(entry); //Atrela o resultado aos valores armazenados em "entry"
+			dicionario.put(tamanhoDicionario++, caracteres + entry.charAt(0));//caso necessario aumenta o tamanho do dicionario e concatena os caracteres com os "entry"
+			caracteres = entry; //caracteres recebe os valores de "entry"
+		}
+
+		return result.toString(); //o resultado é transformado em String para vizualização
 	}
 }
