@@ -114,7 +114,7 @@ public class Menus {
     public static void menuLZW() {
         byte in1;
         Scanner in = new Scanner(System.in);
-		do {
+        do {
             System.out.printf("\n");
             System.out.printf("\t.---------------------------\n");
             System.out.printf("\t|       Menu LZW            |\n");
@@ -124,29 +124,31 @@ public class Menus {
             System.out.printf("\t|      3 - Sair             |\n");
             System.out.printf("\t'---------------------------\n");
             System.out.printf("\n");
-    
-			System.out.println("Qual seria a operação a ser feita?");
-			in1 = in.nextByte();
-			switch(in1){
-				case 1:{
-					//Compactação
+
+            System.out.println("Qual seria a operação a ser feita?");
+            in1 = in.nextByte();
+            switch (in1) {
+                case 1: {
+                    // Compactação
                     Funcoes.codificador(null);
-				}
-				break;
-				case 2:{
-					//Descompactação
-					Funcoes.descodificador(null);
-				}
-				break;
-				case 3:{
-					System.out.println("Programa Encerrado");
-					System.exit(0);
-				}
-				default:{
-					System.out.println("Opção invalida!");
-				}
-			}
-		}while(in1 > 3);
+                }
+                    break;
+                case 2: {
+                    // Descompactação
+                    Funcoes.descodificador(null);
+                }
+                    break;
+                case 3: {
+                    System.out.println("Voltando ao menu inicial...");
+                    Menus.menuInicial();
+                }
+                    break;
+                default: {
+                    System.out.println("Opção invalida!");
+                    Menus.menuInicial();
+                }
+            }
+        } while (in1 > 3);
         in.close();
     }
 }

@@ -63,12 +63,13 @@ public class Main {
                             Menus.contaDeletada(); // Exibe mensagem de conta deletada
                         }
                     }
+                        break;
                     case 6: {
                         // MENU LZW
-                        Menus.menuLZW();;
-                        
+                        Menus.menuLZW();
+
                     }
-                    break;
+                        break;
                     case 7:
                         System.out.printf("\n\tPrograma finalizado.\n");
                         System.exit(0);
