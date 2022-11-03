@@ -112,9 +112,10 @@ public class Menus {
         System.out.printf("\n");
     }
 
-    public static void menuLZW() {
+    public static void menuLZW(String dadosConta) {
         byte in1;
         Scanner in = new Scanner(System.in);
+        List<Integer> compressão = null;
 		do {
             System.out.printf("\n");
             System.out.printf("\t.---------------------------\n");
@@ -128,16 +129,17 @@ public class Menus {
     
 			System.out.println("Qual seria a operação a ser feita?");
 			in1 = in.nextByte();
+           
+
 			switch(in1){
 				case 1:{
 					//Compactação
-                    List<Integer> compressão = Funcoes.codificador("geekific-geekific");
+                    compressão = Funcoes.codificador(dadosConta);
                     System.out.println(compressão);
 				}
 				break;
 				case 2:{
 					//Descompactação
-                    List<Integer> compressão = Funcoes.codificador("geekific-geekific");
 					String descompressão = Funcoes.decodificador(compressão);
                     System.out.println(descompressão);
 				}
@@ -151,7 +153,7 @@ public class Menus {
                     System.out.println("Opção invalida!");
                 }
             }
-        } while (in1 > 3);
+        } while (in1 != 3);
         in.close();
     }
 }

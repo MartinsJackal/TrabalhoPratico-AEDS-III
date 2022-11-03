@@ -66,8 +66,8 @@ public class Main {
                         break;
                     case 6: {
                         // MENU LZW
-                        Menus.menuLZW();
-
+                        Menus.menuLZW(Funcoes.ler(RAF, RAF2, in1).toString());
+                        
                     }
                         break;
                     case 7:
