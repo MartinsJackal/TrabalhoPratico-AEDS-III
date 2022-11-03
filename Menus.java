@@ -142,15 +142,15 @@ public class Menus {
                     System.out.println(descompressão);
 				}
 				break;
-				case 3:{
-					System.out.println("Programa Encerrado");
-					System.exit(0);
-				}
-				default:{
-					System.out.println("Opção invalida!");
-				}
-			}
-		}while(in1 != 3);
+                    Menus.menuInicial();
+                }
+                    break;
+                default: {
+                    System.out.println("Opção invalida!");
+                    Menus.menuInicial();
+                }
+            }
+        } while (in1 > 3);
         in.close();
     }
 }
