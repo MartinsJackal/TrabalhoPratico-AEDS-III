@@ -142,12 +142,13 @@ public class Menus {
                     System.out.println(descompressão);
 				}
 				break;
+                case 3:{
+                    System.out.println("Voltando ao menu inicial...");
                     Menus.menuInicial();
                 }
-                    break;
+                break;
                 default: {
                     System.out.println("Opção invalida!");
-                    Menus.menuInicial();
                 }
             }
         } while (in1 > 3);
