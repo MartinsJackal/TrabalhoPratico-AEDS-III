@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Menus {
@@ -130,12 +131,15 @@ public class Menus {
 			switch(in1){
 				case 1:{
 					//Compactação
-                    Funcoes.codificador(null);
+                    List<Integer> compressão = Funcoes.codificador("geekific-geekific");
+                    System.out.println(compressão);
 				}
 				break;
 				case 2:{
 					//Descompactação
-					Funcoes.descodificador(null);
+                    List<Integer> compressão = Funcoes.codificador("geekific-geekific");
+					String descompressão = Funcoes.decodificador(compressão);
+                    System.out.println(descompressão);
 				}
 				break;
 				case 3:{
@@ -146,7 +150,7 @@ public class Menus {
 					System.out.println("Opção invalida!");
 				}
 			}
-		}while(in1 > 3);
+		}while(in1 != 3);
         in.close();
     }
 }

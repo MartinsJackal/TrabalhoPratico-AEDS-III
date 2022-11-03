@@ -1,7 +1,4 @@
 import java.util.*;
-
-import javax.lang.model.util.ElementScanner6;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -438,7 +435,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 	
 	}
 
-	public static String descodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
+	public static String decodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
 		Map<Integer, String> dicionario = new HashMap<>(); //Neste caso precisamos saber os numeros e os caracteres para decodificarmos.
 		for (int i = 0; i < tamanhoDicionario; i++){
