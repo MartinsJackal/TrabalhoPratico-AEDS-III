@@ -1,6 +1,8 @@
 import java.util.*;
 import java.io.EOFException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 
 public class Funcoes // Módulo das opções possíveis do projeto.
@@ -410,9 +412,14 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 	public static void LZW(Scanner in){
 		
 	}
+	
 
 	public static List<Integer> codificador(String text) {
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
+		java.io.File diretorio = new java.io.File("C:\\Users\\Martins\\Desktop\\TrabalhoPratico-AEDS-III");
+		java.io.File arquivo = new java.io.File(diretorio, "compactadoVersão_1");
+		int n = 1;
+		
 		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario para percorrermos o proprio
 		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos valores dos nossos dados no dicionario até estourarmos a capacidade.
 			dicionario.put(String.valueOf((char) i), i);
@@ -421,6 +428,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		String foundChars = ""; //Declaramos uma variavel auxiliar para armazenar os caracteres encontrados para unilos posteriormente
 		List<Integer> result = new ArrayList<>(); //Criamos um array para exibir o resultado no fim
+		
 		for (char caracter : text.toCharArray()) { //Percorremos o dicionario verificando se o caracter existe, se não inserimos diretamente no array de result o codigo daquele caracter se existe armazenamos em "foundChars" e passamos para o proximo para realizar a união
 			String charsToAdd = foundChars + caracter;
 			if(dicionario.containsKey(charsToAdd)){
@@ -430,9 +438,23 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 				dicionario.put(charsToAdd, tamanhoDicionario++);
 				foundChars = String.valueOf(caracter);
 		}
+		
 	}
-	return result;
+	try {
+		if(arquivo.exists()){
+			n++;
+			arquivo = new java.io.File(diretorio, "compactadoVersão_"+n);
+		}
+		FileWriter defineArquivo = new FileWriter(arquivo, false);
+		PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
+		escreveEmArquivo.print(result.toString());
+		escreveEmArquivo.close();
+	}catch(IOException e){
+		e.printStackTrace();
+	}
 	
+	return result;
+		
 	}
 
 	public static String decodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
