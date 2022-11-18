@@ -416,8 +416,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 	public static List<Integer> codificador(String text) {
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
-		java.io.File diretorio = new java.io.File("C:\\Users\\Martins\\Desktop\\TrabalhoPratico-AEDS-III");
-		java.io.File arquivo = new java.io.File(diretorio, "compactadoVersão_1");
+		java.io.File arquivo = new java.io.File("compactadoVersão_1");
 		int n = 1;
 		
 		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario para percorrermos o proprio
@@ -444,7 +443,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 	try {
 		if(arquivo.exists()){
 			n++;
-			arquivo = new java.io.File(diretorio, "compactadoVersão_"+n);
+			arquivo = new java.io.File("compactadoVersão_"+n);
 		}
 		FileWriter defineArquivo = new FileWriter(arquivo, false);
 		PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
