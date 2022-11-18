@@ -439,6 +439,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 				foundChars = String.valueOf(caracter);
 		}
 		
+		
 	}
 	try {
 		if(arquivo.exists()){
