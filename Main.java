@@ -66,8 +66,9 @@ public class Main {
                         break;
                     case 6: {
                         // MENU LZW
-                        Menus.menuLZW(Funcoes.pegaArquivo());
-                        //Funcoes.ler(RAF, RAF2, in1).toString()
+                        Menus.menuLZW(Funcoes.ler(RAF, RAF2, in1).toString());
+                        //
+                        //Funcoes.pegaArquivo()
                     }
                         break;
                     case 7:

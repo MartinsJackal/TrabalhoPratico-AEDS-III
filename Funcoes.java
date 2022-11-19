@@ -438,12 +438,15 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		
 	}
 	
-
 	public static List<Integer> codificador(String text) {
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
 		File arquivo = new File("dadosCompressao_1");
 		int n = 1;
-		
+		long startCompact = System.currentTimeMillis(); //pega tempo 
+		float calculo;
+		float tamanhoArquivoCompact = arquivo.length();
+		float tamanhoArquivoOriginal = pegaArquivo().length();
+		calculo = ((tamanhoArquivoCompact - tamanhoArquivoOriginal)/tamanhoArquivoOriginal) * 100;
 		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario 
 		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos espaços em dicionario até batermos a capacidade.
 			dicionario.put(String.valueOf((char) i), i);
@@ -467,6 +470,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		
 		
 	}
+	
 	try {
 		while(arquivo.exists()){
 			n++;
@@ -474,15 +478,36 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		}
 		FileWriter defineArquivo = new FileWriter(arquivo, false);
 		PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
-		//arquivo.length(); Ver tamanho do arquivo
-		//long start = System.currentTimeMillis(); pega tempo 
+		
+		
 		escreveEmArquivo.print(result.toString());
 		escreveEmArquivo.close();
 	}catch(IOException e){
 		e.printStackTrace();
 	}
+	if(tamanhoArquivoCompact > tamanhoArquivoOriginal){
+		System.out.printf("\t.-------------------------------------.\n");
+		System.out.printf("\t.Houve uma perda ao compactar de %.2f" , calculo);
+		System.out.println("%!");
+		System.out.printf("\t.-------------------------------------.\n");
+	}else if(tamanhoArquivoCompact == tamanhoArquivoOriginal){
+		System.out.printf("\t.-----------------------------------------.\n");
+		System.out.printf("\t.Não houve perda nem ganho na compactação!");
+		System.out.printf("\t.-----------------------------------------.\n");
+	}else{
+		System.out.printf("\t.---------------------------.\n");
+		System.out.printf("Houve um ganho de %.2f", calculo);
+		System.out.println("%!");
+		System.out.printf("\t.---------------------------.\n");
+	}
+	long endCompact = System.currentTimeMillis();
+	float tempoExec = endCompact - startCompact;
+	System.out.printf("\t.-------------------------------------------.\n");
+	System.out.printf("\t.Tempo de execução do algoritmo = %.3f ms%n.", tempoExec);
+	System.out.printf("\t.-------------------------------------------.\n");
 	
 	return result;
+
 		
 	}
 
