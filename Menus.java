@@ -134,6 +134,7 @@ public class Menus {
 			switch(in1){
 				case 1:{
 					//Compactação
+                    
                     compressão = Funcoes.codificador(dadosConta);
                     System.out.println(compressão);
 				}

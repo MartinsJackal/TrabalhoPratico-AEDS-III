@@ -92,6 +92,7 @@ public class conta // Definição do objeto 'Conta' e suas características.
 		DOS.writeFloat(saldo);
 
 		return gerador.toByteArray();
+		
 	}
 
 	public void fromByteArray(byte[] byteContas) throws IOException {

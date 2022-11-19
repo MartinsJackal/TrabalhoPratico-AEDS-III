@@ -1,9 +1,12 @@
 import java.util.*;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 
 public class Funcoes // Módulo das opções possíveis do projeto.
 {
@@ -179,6 +182,28 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 		return C;
 
+	}
+
+	public static String pegaArquivo(){ //Função para transformarmos nosso arquivo de bytes com todas as contas criadas para String
+		String textoDoArquivo = "";
+		File file = new File("dados.db");
+		try {
+        	byte[] bytes = Files.readAllBytes(file.toPath());
+			
+				textoDoArquivo = new String(bytes, "UTF-8");
+			}
+		 catch (UnsupportedEncodingException e) {
+				
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+			
+			
+			return textoDoArquivo;
+        	
 	}
 
 	// Função de atualizar conta, que varre o sistema pelo ID informado a fim de
@@ -416,11 +441,11 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 	public static List<Integer> codificador(String text) {
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
-		java.io.File arquivo = new java.io.File("compactadoVersão_1");
+		File arquivo = new File("dadosCompressao_1");
 		int n = 1;
 		
-		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario para percorrermos o proprio
-		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos valores dos nossos dados no dicionario até estourarmos a capacidade.
+		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario 
+		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos espaços em dicionario até batermos a capacidade.
 			dicionario.put(String.valueOf((char) i), i);
 
 		}
@@ -432,7 +457,9 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 			String charsToAdd = foundChars + caracter;
 			if(dicionario.containsKey(charsToAdd)){
 				foundChars = charsToAdd;
-			}else{
+			
+			}
+			else{
 				result.add(dicionario.get(foundChars));
 				dicionario.put(charsToAdd, tamanhoDicionario++);
 				foundChars = String.valueOf(caracter);
@@ -441,12 +468,14 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		
 	}
 	try {
-		if(arquivo.exists()){
+		while(arquivo.exists()){
 			n++;
-			arquivo = new java.io.File("compactadoVersão_"+n);
+			arquivo = new java.io.File("dadosCompressao_"+n);
 		}
 		FileWriter defineArquivo = new FileWriter(arquivo, false);
 		PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
+		//arquivo.length(); Ver tamanho do arquivo
+		//long start = System.currentTimeMillis(); pega tempo 
 		escreveEmArquivo.print(result.toString());
 		escreveEmArquivo.close();
 	}catch(IOException e){
@@ -458,18 +487,21 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 	}
 
 	public static String decodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
+		Scanner in = new Scanner(System.in);
 		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
+		//System.out.println("Informe a versão a ser descompactada");
+		//in.nextInt();
+
 		Map<Integer, String> dicionario = new HashMap<>(); //Neste caso precisamos saber os numeros e os caracteres para decodificarmos.
 		for (int i = 0; i < tamanhoDicionario; i++){
 			dicionario.put(i, String.valueOf((char) i));
 		}
 
 		String caracteres = String.valueOf((char) encodedText.remove(0).intValue()); //Verificamos caracter por caracter para decodifica-lo e remove-lo do array para constar somente a decodificação
+		
 		StringBuilder result = new StringBuilder(caracteres);//Construtor de Strings para o resultado
 		for(int code : encodedText){ //Verificamos se há ou não o "code" na iteração atual, se sim nós recuperamos a informação dele e jogamos dentro de entry para ficar armazenado, se não pegamos o primeiro caracter da iteração anterior e unimos eles para formar um novo codigo.
-			String entry = dicionario.containsKey(code)
-			? dicionario.get(code)
-			: caracteres + caracteres.charAt(0);
+			String entry = dicionario.containsKey(code)? dicionario.get(code): caracteres + caracteres.charAt(0);
 			result.append(entry); //Atrela o resultado aos valores armazenados em "entry"
 			dicionario.put(tamanhoDicionario++, caracteres + entry.charAt(0));//caso necessario aumenta o tamanho do dicionario e concatena os caracteres com os "entry"
 			caracteres = entry; //caracteres recebe os valores de "entry"
