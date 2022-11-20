@@ -89,6 +89,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        in1.close();// erro 937 resolvido
+        in1.close();
     }
 }
