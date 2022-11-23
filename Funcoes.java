@@ -11,6 +11,7 @@ import java.nio.file.Files;
 public class Funcoes // Módulo das opções possíveis do projeto.
 {
 	static File arquivo = new File("dadosCompressao_1");
+
 	public static int buscar(int idConta, RandomAccessFile RAF2) throws IOException {
 		byte lapide;
 		int id;
@@ -185,26 +186,25 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 
 	}
 
-	public static String pegaArquivo(){ //Função para transformarmos nosso arquivo de bytes com todas as contas criadas para String
+	public static String pegaArquivo() { // Função para transformarmos nosso arquivo de bytes com todas as contas criadas
+																				// para String
 		String textoDoArquivo = "";
 		File file = new File("dados.db");
 		try {
-        	byte[] bytes = Files.readAllBytes(file.toPath());
-			
-				textoDoArquivo = new String(bytes, "UTF-8");
-			}
-		 catch (UnsupportedEncodingException e) {
-				
-				e.printStackTrace();
-				
-			} catch (IOException e) {
-			
+			byte[] bytes = Files.readAllBytes(file.toPath());
+
+			textoDoArquivo = new String(bytes, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
 			e.printStackTrace();
 		}
-			
-			
-			return textoDoArquivo;
-        	
+
+		return textoDoArquivo;
+
 	}
 
 	// Função de atualizar conta, que varre o sistema pelo ID informado a fim de
@@ -434,124 +434,141 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 		return true;
 	}
 
-	//Função para mechermos com compactação e descompactação utilizando o algoritmo de LZW
-	public static void LZW(Scanner in){
-		
+	// Função para mechermos com compactação e descompactação utilizando o algoritmo
+	// de LZW
+	public static void LZW(Scanner in) {
+
 	}
-	
+
 	public static List<Integer> codificador(String text) {
-		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
-		
+		int tamanhoDicionario = 256; // Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de
+																	// erro maior.
+
 		int n = 1;
-		long startCompact = System.currentTimeMillis(); //pega tempo 
+		long startCompact = System.currentTimeMillis(); // pega tempo
 		float calculo;
 		float tamanhoArquivoCompact = arquivo.length();
 		float tamanhoArquivoOriginal = pegaArquivo().length();
-		calculo = ((tamanhoArquivoCompact - tamanhoArquivoOriginal)/tamanhoArquivoOriginal) * 100;//Linha responsavel pelo calculo da perda/ganho do arquivo
-		Map<String, Integer> dicionario = new HashMap<>(); //Mapeamos o dicionario 
-		for (int i = 0; i < tamanhoDicionario ; i++) { //Inserimos espaços em dicionario até batermos a capacidade.
+		calculo = ((tamanhoArquivoCompact - tamanhoArquivoOriginal) / tamanhoArquivoOriginal) * 100;// Linha responsavel
+																																																// pelo calculo da
+																																																// perda/ganho do
+																																																// arquivo
+		Map<String, Integer> dicionario = new HashMap<>(); // Mapeamos o dicionario
+		for (int i = 0; i < tamanhoDicionario; i++) { // Inserimos espaços em dicionario até batermos a capacidade.
 			dicionario.put(String.valueOf((char) i), i);
 
 		}
 
-		String foundChars = ""; //Declaramos uma variavel auxiliar para armazenar os caracteres encontrados para unilos posteriormente
-		List<Integer> result = new ArrayList<>(); //Criamos um array para exibir o resultado no fim
-		
-		for (char caracter : text.toCharArray()) { //Percorremos o dicionario verificando se o caracter existe, se não inserimos diretamente no array de result o codigo daquele caracter se existe armazenamos em "foundChars" e passamos para o proximo para realizar a união
+		String foundChars = ""; // Declaramos uma variavel auxiliar para armazenar os caracteres encontrados
+														// para unilos posteriormente
+		List<Integer> result = new ArrayList<>(); // Criamos um array para exibir o resultado no fim
+
+		for (char caracter : text.toCharArray()) { // Percorremos o dicionario verificando se o caracter existe, se não
+																								// inserimos diretamente no array de result o codigo daquele caracter se
+																								// existe armazenamos em "foundChars" e passamos para o proximo para
+																								// realizar a união
 			String charsToAdd = foundChars + caracter;
-			if(dicionario.containsKey(charsToAdd)){
+			if (dicionario.containsKey(charsToAdd)) {
 				foundChars = charsToAdd;
-			
-			}
-			else{
+
+			} else {
 				result.add(dicionario.get(foundChars));
 				dicionario.put(charsToAdd, tamanhoDicionario++);
 				foundChars = String.valueOf(caracter);
+			}
+
 		}
-		
-		
-	}
-	
-	//Criação do arquivo compactado para escrita
-	try {
-		while(arquivo.exists()){
-			n++;
-			arquivo = new java.io.File("dadosCompressao_"+n);
+
+		// Criação do arquivo compactado para escrita
+		try {
+			while (arquivo.exists()) {
+				n++;
+				arquivo = new java.io.File("dadosCompressao_" + n);
+			}
+			FileWriter defineArquivo = new FileWriter(arquivo, false);
+			PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
+
+			escreveEmArquivo.print(result.toString());
+			escreveEmArquivo.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		FileWriter defineArquivo = new FileWriter(arquivo, false);
-		PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
-		
-		
-		escreveEmArquivo.print(result.toString());
-		escreveEmArquivo.close();
-	}catch(IOException e){
-		e.printStackTrace();
-	}
-	//Nas linhas a seguir verificamos o tamanho de ambos arquivos de dados para podermos calcular o ganho ou a perda ao compactar um arquivo.
-	if(tamanhoArquivoCompact > tamanhoArquivoOriginal){
-		System.out.printf("\t.-------------------------------------.\n");
-		System.out.printf("\t.Houve uma perda ao compactar de %.2f" , calculo);
-		System.out.println("%!");
-		System.out.printf("\t.-------------------------------------.\n");
-	}else if(tamanhoArquivoCompact == tamanhoArquivoOriginal){
-		System.out.printf("\t.-----------------------------------------.\n");
-		System.out.printf("\t.Não houve perda nem ganho na compactação!");
-		System.out.printf("\t.-----------------------------------------.\n");
-	}else{
-		System.out.printf("\t.---------------------------.\n");
-		System.out.printf("Houve um ganho de %.2f", calculo);
-		System.out.println("%!");
-		System.out.printf("\t.---------------------------.\n");
-	}
+		// Nas linhas a seguir verificamos o tamanho de ambos arquivos de dados para
+		// podermos calcular o ganho ou a perda ao compactar um arquivo.
+		if (tamanhoArquivoCompact > tamanhoArquivoOriginal) {
+			System.out.printf("\t.-------------------------------------.\n");
+			System.out.printf("\t.Houve uma perda ao compactar de %.2f", calculo);
+			System.out.println("%!");
+			System.out.printf("\t.-------------------------------------.\n");
+		} else if (tamanhoArquivoCompact == tamanhoArquivoOriginal) {
+			System.out.printf("\t.-----------------------------------------.\n");
+			System.out.printf("\t.Não houve perda nem ganho na compactação!");
+			System.out.printf("\t.-----------------------------------------.\n");
+		} else {
+			System.out.printf("\t.---------------------------.\n");
+			System.out.printf("Houve um ganho de %.2f", calculo);
+			System.out.println("%!");
+			System.out.printf("\t.---------------------------.\n");
+		}
 
-	//Calculo para exibição do tempo de execução do sistema
-	long endCompact = System.currentTimeMillis();
-	float tempoExec = endCompact - startCompact;
+		// Calculo para exibição do tempo de execução do sistema
+		long endCompact = System.currentTimeMillis();
+		float tempoExec = endCompact - startCompact;
 
-	System.out.printf("\t.-------------------------------------------.\n");
-	System.out.printf("\t.Tempo de execução do algoritmo = %.3f ms%n.", tempoExec);
-	System.out.printf("\t.-------------------------------------------.\n");
-	
-	return result;
+		System.out.printf("\t.-------------------------------------------.\n");
+		System.out.printf("\t.Tempo de execução do algoritmo = %.3f ms%n.", tempoExec);
+		System.out.printf("\t.-------------------------------------------.\n");
 
-		
+		return result;
+
 	}
 
-	public static String decodificador(List<Integer> encodedText) { //Em descodificador recebemos como parametro as informações codificadas pela função "codificador"
+	public static String decodificador(List<Integer> encodedText) { // Em descodificador recebemos como parametro as
+																																	// informações codificadas pela função "codificador"
 		Scanner in = new Scanner(System.in);
-		int tamanhoDicionario = 256; //Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de erro maior.
+		int tamanhoDicionario = 256; // Declaramos o tamanho do dicionario como 2 a oitava para ter uma margem de
+																	// erro maior.
 		int n = 1;
 
-		File arquivoSubstituto = new File("dadosDescompressao_1");//Arquivo para substituir os dados originais
-		Map<Integer, String> dicionario = new HashMap<>(); //Neste caso precisamos saber os numeros e os caracteres para decodificarmos.
-			for (int i = 0; i < tamanhoDicionario; i++){
-				dicionario.put(i, String.valueOf((char) i));
-			}
-	
-			String caracteres = String.valueOf((char) encodedText.remove(0).intValue()); //Verificamos caracter por caracter para decodifica-lo e remove-lo do array para constar somente a decodificação
-			
-			StringBuilder result = new StringBuilder(caracteres);//Construtor de Strings para o resultado
-			for(int code : encodedText){ //Verificamos se há ou não o "code" na iteração atual, se sim nós recuperamos a informação dele e jogamos dentro de entry para ficar armazenado, se não pegamos o primeiro caracter da iteração anterior e unimos eles para formar um novo codigo.
-				String entry = dicionario.containsKey(code)? dicionario.get(code): caracteres + caracteres.charAt(0);
-				result.append(entry); //Atrela o resultado aos valores armazenados em "entry"
-				dicionario.put(tamanhoDicionario++, caracteres + entry.charAt(0));//caso necessario aumenta o tamanho do dicionario e concatena os caracteres com os "entry"
-				caracteres = entry; //caracteres recebe os valores de "entry"
-			}
-			
-			arquivo.renameTo(arquivoSubstituto);
-			try {
-				FileWriter defineArquivo;
-				defineArquivo = new FileWriter(arquivoSubstituto, false);
-				PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
-				//Parte responsavel por sobrepor as informações do arquivo original.
-				escreveEmArquivo.print(result.toString());
-				escreveEmArquivo.close();
-	
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-		return result.toString(); //o resultado é transformado em String para vizualização
+		File arquivoSubstituto = new File("dadosDescompressao_1");// Arquivo para substituir os dados originais
+		Map<Integer, String> dicionario = new HashMap<>(); // Neste caso precisamos saber os numeros e os caracteres para
+																												// decodificarmos.
+		for (int i = 0; i < tamanhoDicionario; i++) {
+			dicionario.put(i, String.valueOf((char) i));
+		}
+
+		String caracteres = String.valueOf((char) encodedText.remove(0).intValue()); // Verificamos caracter por caracter
+																																									// para decodifica-lo e remove-lo do
+																																									// array para constar somente a
+																																									// decodificação
+
+		StringBuilder result = new StringBuilder(caracteres);// Construtor de Strings para o resultado
+		for (int code : encodedText) { // Verificamos se há ou não o "code" na iteração atual, se sim nós recuperamos a
+																		// informação dele e jogamos dentro de entry para ficar armazenado, se não
+																		// pegamos o primeiro caracter da iteração anterior e unimos eles para formar um
+																		// novo codigo.
+			String entry = dicionario.containsKey(code) ? dicionario.get(code) : caracteres + caracteres.charAt(0);
+			result.append(entry); // Atrela o resultado aos valores armazenados em "entry"
+			dicionario.put(tamanhoDicionario++, caracteres + entry.charAt(0));// caso necessario aumenta o tamanho do
+																																				// dicionario e concatena os caracteres com os
+																																				// "entry"
+			caracteres = entry; // caracteres recebe os valores de "entry"
+		}
+
+		arquivo.renameTo(arquivoSubstituto);
+		try {
+			FileWriter defineArquivo;
+			defineArquivo = new FileWriter(arquivoSubstituto, false);
+			PrintWriter escreveEmArquivo = new PrintWriter(defineArquivo);
+			// Parte responsavel por sobrepor as informações do arquivo original.
+			escreveEmArquivo.print(result.toString());
+			escreveEmArquivo.close();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		return result.toString(); // o resultado é transformado em String para vizualização
 	}
-	
+
 }

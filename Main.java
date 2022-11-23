@@ -10,7 +10,7 @@ public class Main {
     {
         Scanner in1 = new Scanner(System.in);
         int opcao = 0;
-        
+
         try {
             RandomAccessFile RAF = new RandomAccessFile("dados.db", "rw");
             RandomAccessFile RAF2 = new RandomAccessFile("indices.db", "rw");
@@ -67,8 +67,6 @@ public class Main {
                     case 6: {
                         // MENU LZW
                         Menus.menuLZW(Funcoes.ler(RAF, RAF2, in1).toString());
-                        //
-                        //Funcoes.pegaArquivo()
                     }
                         break;
                     case 7:
