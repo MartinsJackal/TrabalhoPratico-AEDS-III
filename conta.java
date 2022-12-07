@@ -46,7 +46,7 @@ public class conta // Definição do objeto 'Conta' e suas características.
 			this.emails.add(e);
 		}
 		this.nomeUsuario = nomeUsuario;
-		this.senha = senha;
+		this.senha = criptografia.encrypt(senha, "donotspeakAboutTHIS"); //chama o metodo encrypt para criptografar a senha antes de envia-la a base de dados utilizando a frase ao lado como referencia de criptografia já explicado na classe "criptografia"
 		this.cpf = cpf;
 		this.cidade = cidade;
 		this.transferenciasRealizadas = transferenciasRealizadas;
@@ -64,6 +64,7 @@ public class conta // Definição do objeto 'Conta' e suas características.
 				+ "\n\t| Número da conta       | " + idConta
 				+ "\n\t| Nome completo         | " + nomePessoa
 				+ "\n\t| Nome usuário          | " + nomeUsuario
+				+ "\n\t| Senha                 | " + criptografia.decrypt(senha, "donotspeakAboutTHIS") //chama a função decrypt para descriptografar a senha do usuário e exibi-la na tela novamente sem estar criptografada,caso a frase ao lado seja diferente da enviada para criptografar não sera possivel descriptografar a mensagem
 				+ "\n\t| Cidade                | " + cidade
 				+ "\n\t| CPF                   | " + cpf
 				+ "\n\t| Saldo                 | " + Conversor.floatParaString(saldo)

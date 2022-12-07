@@ -1,4 +1,9 @@
 import java.util.*;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,6 +12,7 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.security.MessageDigest;
 
 public class Funcoes // Módulo das opções possíveis do projeto.
 {
@@ -553,5 +559,7 @@ public class Funcoes // Módulo das opções possíveis do projeto.
 			}
 		return result.toString(); //o resultado é transformado em String para vizualização
 	}
+
+	
 	
 }
